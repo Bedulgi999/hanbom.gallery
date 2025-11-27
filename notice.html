@@ -147,8 +147,22 @@
 
   <script src="login.js"></script>
   <script src="index.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+    const writeBtn = document.querySelector(".write-btn");
+
+    if (loggedUser && loggedUser.role === "admin") {
+        writeBtn.style.display = "inline-flex";  // ★ 학생회만 보임
+    }
+});
+</script>
+
+  
 </body>
 </html>
+
 
 
 
