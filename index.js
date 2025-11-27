@@ -33,3 +33,21 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.reload();
     });
 });
+// 기본 학생회 관리자 계정 생성
+(function () {
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const adminExists = users.some(u => u.role === "admin");
+
+    if (!adminExists) {
+        users.push({
+            id: "studentCouncil",
+            pw: "hb1234",
+            name: "학생회",
+            role: "admin"
+        });
+
+        localStorage.setItem("users", JSON.stringify(users));
+    }
+})();
+
