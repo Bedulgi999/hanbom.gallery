@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공지사항 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 상단 헤더 -->
+  <header class="header">
+    <a href="index.html" class="logo">
+        <img src="hanbom.png" alt="학교 로고">
+        <span>HANBOM GALLERY</span>
+    </a>
+
+    <nav class="nav">
+      <a href="home.html">홈</a>
+      <a href="notice.html" style="color:#1f6feb; font-weight:700;">공지사항</a>
+      <a href="index.html">자유게시판</a>
+      <a href="#">질문답변</a>
+      <a href="#">동아리</a>
+    </nav>
+
+    <div class="auth-buttons">
+        <a href="login.html" class="btn-login">로그인</a>
+        <a href="register.html" class="btn-signup">회원가입</a>
+    </div>
+  </header>
+
+  <!-- 메인 레이아웃 -->
+  <main class="container">
+    <!-- 왼쪽: 공지사항 게시판 -->
+    <section class="main-content">
+      
+      <!-- 상단 탭 -->
+      <div class="board-tabs">
+        <button class="tab active">공지사항</button>
+      </div>
+
+      <!-- 글쓰기 + 검색 -->
+      <div class="toolbar">
+        <button class="btn-primary">✏️ 공지 작성</button>
+        <div class="search-box">
+          <input type="text" placeholder="검색어를 입력하세요">
+        </div>
+      </div>
+
+      <!-- 공지사항 리스트 -->
+      <table class="post-table">
+        <thead>
+          <tr>
+            <th class="col-category">분류</th>
+            <th class="col-title">제목</th>
+            <th class="col-writer">작성자</th>
+            <th class="col-date">날짜</th>
+            <th class="col-views">조회</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="notice-row">
+            <td>[공지]</td>
+            <td>2025학년도 한봄고 축제 안내</td>
+            <td>운영자</td>
+            <td>2025-03-01</td>
+            <td>2103</td>
+          </tr>
+
+          <tr class="notice-row">
+            <td>[공지]</td>
+            <td>커뮤니티 운영정책 변경 안내</td>
+            <td>운영자</td>
+            <td>2025-02-20</td>
+            <td>1850</td>
+          </tr>
+
+          <tr class="notice-row">
+            <td>[공지]</td>
+            <td>비매너/욕설 제재 강화 안내</td>
+            <td>관리자</td>
+            <td>2025-02-10</td>
+            <td>1344</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 페이지네이션 -->
+      <div class="pagination">
+        <button class="page-btn disabled">〈</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">〉</button>
+      </div>
+
+    </section>
+
+    <!-- 오른쪽: 사이드바 -->
+    <aside class="sidebar">
+
+      <!-- 로그인 카드 -->
+      <div class="card">
+        <h3>로그인</h3>
+        <form class="login-form">
+          <input type="text" placeholder="아이디">
+          <input type="password" placeholder="비밀번호">
+          <button type="submit" class="btn-primary full">로그인</button>
+        </form>
+        <div class="login-links">
+          <a href="register.html">회원가입</a>
+          <span>·</span>
+          <a href="#">아이디/비밀번호 찾기</a>
+        </div>
+      </div>
+
+      <!-- 공지 영역 -->
+      <div class="card">
+        <h3>📢 최신 공지</h3>
+        <ul class="simple-list">
+          <li>📌 축제 공지 업데이트</li>
+          <li>📌 운영정책 개정 안내</li>
+          <li>📌 시험기간 이용안내</li>
+        </ul>
+      </div>
+
+      <!-- 인기글 카드 -->
+      <div class="card">
+        <h3>🔥 인기 글</h3>
+        <ol class="rank-list">
+          <li>시험 난이도 후기</li>
+          <li>학교 썰 모음</li>
+          <li>급식 랭킹</li>
+          <li>맛집 추천</li>
+          <li>공부 꿀팁</li>
+        </ol>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div>© 2025 HANBOM GALLERY. All rights reserved.</div>
+  </footer>
+
+  <script src="login.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
