@@ -1,25 +1,5 @@
 // index.js
 
-
-// 기본 학생회 관리자 계정 생성
-(function () {
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const adminExists = users.some(u => u.role === "admin");
-
-    if (!adminExists) {
-        users.push({
-            id: "hanbom",
-            pw: "hb0330",
-            name: "한봄고등학교",
-            role: "admin"
-        });
-
-        localStorage.setItem("users", JSON.stringify(users));
-    }
-})();
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
     const loginCard = document.querySelector(".card .login-form")?.parentElement;
@@ -53,5 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.reload();
     });
 });
+
 
 
