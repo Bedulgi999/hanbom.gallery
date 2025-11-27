@@ -41,13 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!adminExists) {
         users.push({
-            id: "studentCouncil",
-            pw: "hb1234",
-            name: "학생회",
+            id: "hanbom",
+            pw: "hb0330",
+            name: "한봄고등학교",
             role: "admin"
         });
 
         localStorage.setItem("users", JSON.stringify(users));
     }
 })();
+
 
