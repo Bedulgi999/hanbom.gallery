@@ -45,23 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
             visits: 0
         };
 
-        // ⭐ MySQL 서버로 회원가입 요청
-        fetch("http://localhost:3000/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newUser)
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("회원가입 완료!");
-                window.location.href = "login.html";
-            } else {
-                alert("회원가입 실패: " + data.message);
-            }
-        })
-        .catch(() => {
-            alert("서버 연결 실패!");
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("회원가입 완료!");
+        window.location.href = "login.html";
+
         });
     });
-});
