@@ -26,15 +26,23 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        if (users.some(u => u.id === id)) {
+            alert("이미 존재하는 아이디입니다!");
+            return;
+        }
+
         // DB로 전송할 데이터
         const newUser = {
             id,
             pw,
-            name,
-            major,
-            grade,
-            classNum,
-            studentNum
+            name: inputs[2].value,
+            major: inputs[3].value,
+            grade: inputs[4].value,
+            classNum: inputs[5].value,
+            studentNum: inputs[6].value,
+            posts: 0,
+            comments: 0,
+            visits: 0
         };
 
         // ⭐ MySQL 서버로 회원가입 요청
