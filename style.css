@@ -399,3 +399,75 @@ button {
 .btn-logout:hover {
     background: #e5e7eb;
 }
+
+/* ============================= */
+/* 📱 모바일 반응형 레이아웃 */
+/* ============================= */
+@media (max-width: 768px) {
+
+  /* 헤더 */
+  .header {
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    gap: 12px;
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+
+  .auth-buttons,
+  .admin-buttons {
+    margin-left: auto;
+  }
+
+  /* 전체 레이아웃 → 1열 구조 */
+  .container {
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+
+  /* 메인 카드 간격 */
+  .main-content {
+    padding: 14px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  /* 게시글 테이블 스크롤 */
+  .post-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* 사이드바 아래로 이동 */
+  .sidebar {
+    order: 2;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  /* 텍스트 줄이기 */
+  .logo span {
+    font-size: 18px;
+  }
+
+  .post-table td,
+  .post-table th {
+    padding: 6px;
+    font-size: 12px;
+  }
+}

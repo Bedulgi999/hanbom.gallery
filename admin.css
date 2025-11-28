@@ -1,52 +1,55 @@
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f5f7fb;
+    font-family: "Pretendard", sans-serif;
+    background: #f5f7fa;
+    margin: 0;
     padding: 20px;
-    color: #222;
 }
 
-.admin-title {
-    font-size: 26px;
-    font-weight: 800;
+.title {
+    text-align: center;
     margin-bottom: 20px;
-    color: #1f6feb;
+    font-size: 30px;
+    font-weight: 700;
 }
 
-.admin-table {
-    width: 95%;
+.table-wrap {
+    max-width: 1000px;
     margin: 0 auto;
-    border-collapse: collapse;
     background: white;
+    padding: 20px;
     border-radius: 12px;
-    overflow: hidden;
-    font-size: 15px;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.admin-table thead {
-    background: #1f6feb;
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead {
+    background: #2c3e50;
     color: white;
 }
 
-.admin-table th, td {
+table th, table td {
     padding: 12px;
+    border-bottom: 1px solid #e1e1e1;
     text-align: center;
-    border-bottom: 1px solid #e5e7eb;
 }
 
-.admin-table tbody tr:hover {
-    background: #f3f8ff;
+table tbody tr:hover {
+    background: #f0f3f5;
 }
 
 .delete-btn {
     padding: 6px 12px;
-    background: #ff4d4f;
+    background: #e74c3c;
     border: none;
-    color: white;
     border-radius: 6px;
+    color: white;
     cursor: pointer;
 }
 
 .delete-btn:hover {
-    background: #d9363e;
+    background: #c0392b;
 }

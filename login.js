@@ -38,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("로그인 성공!");
 
         // login.html에서 실행되면 index.html로 이동
-        window.location.href = "index.html";
+        location.reload();
     });
 });
+
+
+
+
+
+

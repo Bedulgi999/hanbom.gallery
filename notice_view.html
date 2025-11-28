@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공지 상세보기 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .view-box {
+      background: white;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.1);
+    }
+
+    .v-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .v-info {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .v-content {
+      font-size: 15px;
+      line-height: 1.7;
+      white-space: pre-line;
+      margin-bottom: 20px;
+    }
+
+    .admin-tools {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    /* 댓글 */
+    #comment-box {
+      margin-top: 30px;
+    }
+    .comment-item {
+      background: #f3f4f6;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    /* 모바일 대응 */
+    @media (max-width: 768px) {
+      .view-box {
+        margin: 20px 10px;
+        padding: 18px;
+      }
+      .v-title { font-size: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo">
+      <img src="hanbom.png">
+      <span>HANBOM GALLERY</span>
+  </a>
+</header>
+
+<div class="view-box">
+
+    <div class="v-title" id="v-title"></div>
+    <div class="v-info" id="v-info"></div>
+    <div class="v-content" id="v-content"></div>
+
+    <!-- 관리자 전용 버튼 -->
+    <div id="admin-tools" class="admin-tools">
+      <button class="btn-primary" onclick="editNotice()">수정</button>
+      <button class="btn-login" onclick="openDeleteModal()">삭제</button>
+    </div>
+
+    <button class="btn-login" onclick="location.href='notice.html'">← 목록으로</button>
+
+    <!-- 댓글 영역 -->
+    <div id="comment-box">
+      <h3 style="margin-top:30px;">💬 댓글</h3>
+      <div id="comment-list"></div>
+
+      <textarea id="comment-text" placeholder="댓글을 입력하세요" style="width:100%;height:80px;margin-top:10px;"></textarea>
+      <button class="btn-primary" onclick="addComment()">댓글 작성</button>
+    </div>
+</div>
+
+<!-- 삭제 모달 -->
+<div id="delete-modal" style="
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+  <div style="background:white;padding:18px;border-radius:12px;width:300px;text-align:center;">
+      <h3 style="margin-bottom:10px;">정말 삭제할까요?</h3>
+      <button class="btn-primary" onclick="confirmDelete()">삭제</button>
+      <button class="btn-login" onclick="closeDeleteModal()">취소</button>
+  </div>
+</div>
+
+<script src="notice_view.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

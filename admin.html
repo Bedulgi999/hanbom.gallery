@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>관리자 페이지</title>
-  <link rel="stylesheet" href="admin.css">
+    <meta charset="UTF-8">
+    <title>관리자 페이지 | HANBOM GALLERY</title>
+    <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
-<h2 class="admin-title">회원 DB 관리</h2>
+    <h1 class="title">관리자 페이지</h1>
 
-<table class="admin-table">
-  <thead>
-    <tr>
-      <th onclick="loadUsers('id','ASC')">아이디 </th>
-      <th>비밀번호</th>
+    <div class="table-wrap">
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PW</th>
+                    <th>이름</th>
+                    <th>전공</th>
+                    <th>학년</th>
+                    <th>반</th>
+                    <th>번호</th>
+                    <th>방문수</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-      <th>이름</th>
-      <th>학과</th> 
-
-      <th onclick="loadUsers('grade','ASC')">학년</th>
-
-      <th>반</th>
-      <th>번호</th>s
-
-      <th>삭제</th>
-    </tr>
-  </thead>
-  <tbody id="userTable"></tbody>
-</table>
-
-<script src="admin.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>

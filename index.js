@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
-            <button class="btn-primary">MY갤로그</button>
+            <button class="btn-primary">작성글</button>
             <button class="btn-primary">고정닉정보</button>
             <button class="btn-primary">즐겨찾기</button>
             <button class="btn-primary">운영/가입</button>

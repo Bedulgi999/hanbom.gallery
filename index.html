@@ -15,7 +15,7 @@
 
     <nav class="nav">
       <a href="index.html">홈</a>
-      <a href="#">공지사항</a>
+      <a href="notice.html">공지사항</a>
       <a href="#">자유게시판</a>
       <a href="#">질문답변</a>
       <a href="#">동아리</a>
@@ -42,7 +42,7 @@
 
       <!-- 글 작성 버튼 + 검색 -->
       <div class="toolbar">
-        <button class="btn-primary">✏️ 글쓰기</button>
+        <button class="btn-primary" onclick="location.href='free_write.html'">✏️ 글쓰기</button>
         <div class="search-box">
           <input type="text" placeholder="검색어를 입력하세요">
         </div>
@@ -59,43 +59,7 @@
             <th class="col-views">조회</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="notice-row">
-            <td>[공지]</td>
-            <td>[필독] 커뮤니티 이용 수칙 안내</td>
-            <td>운영자</td>
-            <td>2025-03-01</td>
-            <td>1023</td>
-          </tr>
-          <tr>
-            <td>[잡담]</td>
-            <td>내일 급식 메뉴 아는 사람? 🤔</td>
-            <td>2학년_철수</td>
-            <td>2025-03-10</td>
-            <td>120</td>
-          </tr>
-          <tr>
-            <td>[질문]</td>
-            <td>정보 수행평가 했던 사람..? 난이도 어떰</td>
-            <td>1학년_민지</td>
-            <td>2025-03-10</td>
-            <td>98</td>
-          </tr>
-          <tr>
-            <td>[정보]</td>
-            <td>네트워크 자격증 공부 자료 공유합니다</td>
-            <td>3학년_현수</td>
-            <td>2025-03-09</td>
-            <td>87</td>
-          </tr>
-          <tr>
-            <td>[동아리]</td>
-            <td>코딩 동아리 신규 부원 모집 중 💻</td>
-            <td>동아리장</td>
-            <td>2025-03-09</td>
-            <td>231</td>
-          </tr>
-        </tbody>
+        <tbody id="main-list"></tbody>
       </table>
 
       <!-- 페이지네이션 -->
@@ -128,10 +92,7 @@
       <!-- 공지사항 카드 -->
       <div class="card">
         <h3>📢 공지사항</h3>
-        <ul class="simple-list">
-          <li>[공지] 2025학년도 학교 축제 일정 안내</li>
-          <li>[공지] 시험 기간 커뮤니티 운영 시간 조정</li>
-          <li>[공지] 비매너/욕설 게시글 제재 안내</li>
+        <ul class="simple-list" id="sidebar-notice"></ul>
         </ul>
       </div>
 
@@ -161,6 +122,74 @@
       </div>
     </aside>
   </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", ()=>{
+    
+        let notices = JSON.parse(localStorage.getItem("notices")) || [];
+        let posts = JSON.parse(localStorage.getItem("posts")) || [];
+    
+        // 🔥 1) 공지 pinned 우선 정렬
+        notices.sort((a,b)=> b.pinned - a.pinned);
+    
+        // 🔥 2) 게시글 전체 합치기 (공지 + 자유게시판)
+        let all = [];
+    
+        // 공지 → 말머리 [공지]
+        notices.forEach(n=>{
+            all.push({
+                category: n.pinned ? "[공지]📌" : "[공지]",
+                title: n.title,
+                writer: n.writer,
+                date: n.date,
+                views: n.views
+            });
+        });
+    
+        // 자유게시판
+        posts.forEach(p=>{
+            all.push({
+                category: p.category,
+                title: p.title,
+                writer: p.writer,
+                date: p.date,
+                views: p.views
+            });
+        });
+    
+        const list = document.getElementById("main-list"); // index.html 테이블 tbody
+    
+        let html="";
+        all.forEach(item=>{
+            html+=`
+            <tr${item.category.includes("📌") ? ` style="background:#fff5d9"`:""}>
+                <td>${item.category}</td>
+                <td>${item.title}</td>
+                <td>${item.writer}</td>
+                <td>${item.date}</td>
+                <td>${item.views}</td>
+            </tr>`;
+        });
+    
+        list.innerHTML = html;
+    });
+    </script>
+    
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    
+        const noticeCard = document.querySelector(".simple-list");
+        if (!noticeCard) return;
+    
+        let notices = JSON.parse(localStorage.getItem("notices")) || [];
+    
+        let html = "";
+        notices.slice(0, 3).forEach(n => {
+            html += `<li>[공지] ${n.title}</li>`;
+        });
+    
+        noticeCard.innerHTML = html;
+    });
+  </script>
 
   <!-- 푸터 -->
   <footer class="footer">
@@ -172,7 +201,28 @@
     </div>
   </footer>
 <script src="login.js"></script>
-<script src="index.js"></script>
-</body>
+<script src="index.js"> 
+    document.addEventListener("DOMContentLoaded", () => {
+    const box = document.querySelector(".simple-list");
+    if (!box) return;
 
+    let notices = JSON.parse(localStorage.getItem("notices")) || [];
+
+    let html = "";
+
+    // 최신 공지 3개만 출력
+    notices.slice(0, 3).forEach((n, index) => {
+        html += `
+            <li>
+                <a href="notice_view.html?id=${index}">
+                    [공지] ${n.title}
+                </a>
+            </li>
+        `;
+    });
+
+    box.innerHTML = html;
+});
+</script>
+</body>
 </html>

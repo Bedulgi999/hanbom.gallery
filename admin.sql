@@ -15,7 +15,7 @@ CREATE TABLE users (
     visits INT DEFAULT 0,
     role ENUM('user','admin') DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+); 
 
 INSERT INTO users (id, pw, name, role)
 VALUES ('hanbom', 'hb0330', '한봄고등학교', 'admin');
