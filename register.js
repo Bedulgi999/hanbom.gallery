@@ -3,12 +3,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const registerForm = document.querySelector(".register-form");
 
-
-        if (users.some(u => u.id === id)) {
-            alert("이미 존재하는 아이디입니다!");
-            return;
-        };
-
     if (!registerForm) return;
 
     registerForm.addEventListener("submit", (e) => {
@@ -25,6 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const grade = selectHalf[0].value;
         const classNum = selectHalf[1].value;
         const studentNum = selectHalf[2].value;
+
+        if (users.some(u => u.id === id)) {
+            alert("이미 존재하는 아이디입니다!");
+            return;
+        };
 
         // 빈칸 체크
         if (!id || !pw || !name || !major || !grade || !classNum || !studentNum) {
