@@ -20,11 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const classNum = selectHalf[1].value;
         const studentNum = selectHalf[2].value;
 
-        if (users.some(id)) {
-            alert("이미 존재하는 아이디입니다!");
-            return;
-        };
-
         // 빈칸 체크
         if (!id || !pw || !name || !major || !grade || !classNum || !studentNum) {
             alert("모든 항목을 입력해주세요!");
