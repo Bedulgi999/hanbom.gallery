@@ -30,14 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const newUser = {
             id,
             pw,
-            name: inputs[2].value,
-            major: inputs[3].value,
-            grade: inputs[4].value,
-            classNum: inputs[5].value,
-            studentNum: inputs[6].value,
-            posts: 0,
-            comments: 0,
-            visits: 0
+            name,
+            major,
+            grade,
+            classNum,
+            studentNum,
         };
 
         // ⭐ MySQL 서버로 회원가입 요청
