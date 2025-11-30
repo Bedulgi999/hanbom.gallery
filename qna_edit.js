@@ -8,164 +8,184 @@ const supabase = window.supabase.createClient(
 const params = new URLSearchParams(location.search);
 const postId = params.get("id");
 
-const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+let oldImages = [];
+LetOldFiles = [];
+let newImages = [];
+let newFiles = [];
 
-let oldFilePath = null; // 기존 첨부 저장
-let newUploadedFile = null; // 새 파일 저장
-
-
+// 로드
 document.addEventListener("DOMContentLoaded", () => {
     loadPost();
-
-    // 새 파일 선택 시 미리보기
-    document.getElementById("fileInput").addEventListener("change", handleFilePreview);
+    setupUploadHandlers();
 });
 
-
-// ============================
-// ✔ 기존 글 불러오기
-// ============================
+// 게시글 로드
 async function loadPost() {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("qna")
         .select("*")
         .eq("id", postId)
-        .maybeSingle();
+        .single();
 
-    if (error || !data) {
-        alert("게시글 불러오기 실패");
-        return;
-    }
+    document.getElementById("title").value = data.title;
+    document.getElementById("content").value = data.content;
 
-    // 작성자 or admin만 수정 가능
-    if (!loggedUser || (loggedUser.id !== data.writer && loggedUser.role !== "admin")) {
-        alert("수정 권한이 없습니다");
-        location.href = "qna_view.html?id=" + postId;
-        return;
-    }
+    oldImages = data.images || [];
+    oldFiles = data.files || [];
 
-    document.getElementById("titleInput").value = data.title;
-    document.getElementById("contentInput").value = data.content;
-
-    // 기존 첨부파일 표시
-    if (data.file_url) {
-        oldFilePath = data.file_url;
-
-        if (data.file_url.match(/\.(jpg|jpeg|png|gif)$/)) {
-            document.getElementById("previewImage").src = data.file_url;
-            document.getElementById("previewImage").style.display = "block";
-        }
-
-        document.getElementById("fileName").innerText = "첨부됨: " + data.file_url.split("/").pop();
-        document.getElementById("deleteFileBtn").style.display = "inline-block";
-    }
+    renderOldImages();
+    renderOldFiles();
 }
 
+// 기존 이미지 표시
+function renderOldImages() {
+    const area = document.getElementById("previewImages");
+    area.innerHTML = "";
 
-// ============================
-// ✔ 새 파일 미리보기
-// ============================
-function handleFilePreview(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    newUploadedFile = file;
-
-    // 이미지면 미리보기
-    if (file.type.startsWith("image/")) {
-        const url = URL.createObjectURL(file);
-        document.getElementById("previewImage").src = url;
-        document.getElementById("previewImage").style.display = "block";
-    } else {
-        document.getElementById("previewImage").style.display = "none";
-    }
-
-    document.getElementById("fileName").innerText = file.name;
+    oldImages.forEach((url, idx) => {
+        const box = document.createElement("div");
+        box.className = "preview-item";
+        box.innerHTML = `
+            <img src="${url}" class="preview-img">
+            <button class="remove-img-btn" onclick="removeOldImage(${idx})">&times;</button>
+        `;
+        area.appendChild(box);
+    });
 }
 
+// 기존 삭제
+function removeOldImage(idx) {
+    oldImages.splice(idx, 1);
+    renderOldImages();
+}
 
-// ============================
-// ✔ 기존 첨부 삭제
-// ============================
-async function deleteOldFile() {
-    if (!oldFilePath) return;
+// 파일 표시
+function renderOldFiles() {
+    const list = document.getElementById("fileList");
+    list.innerHTML = "";
 
-    const fileName = oldFilePath.split("/").pop();
+    oldFiles.forEach((url, idx) => {
+        list.innerHTML += `
+            <li class="file-item">
+                <span>📄 ${url.split("/").pop()}</span>
+                <button class="remove-file-btn" onclick="removeOldFile(${idx})">&times;</button>
+            </li>
+        `;
+    });
+}
 
-    await supabase.storage
+function removeOldFile(idx) {
+    oldFiles.splice(idx, 1);
+    renderOldFiles();
+}
+
+// 업로드 핸들러
+function setupUploadHandlers() {
+    // 이미지
+    imgDropBox.addEventListener("click", () => imgUpload.click());
+    imgUpload.addEventListener("change", () => {
+        [...imgUpload.files].forEach(file => newImages.push(file));
+        renderNewImages();
+    });
+
+    // 파일
+    fileDropBox.addEventListener("click", () => fileUpload.click());
+    fileUpload.addEventListener("change", () => {
+        [...fileUpload.files].forEach(file => newFiles.push(file));
+        renderNewFiles();
+    });
+}
+
+// 새 이미지 미리보기
+function renderNewImages() {
+    const area = document.getElementById("previewImages");
+
+    newImages.forEach((file, idx) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const box = document.createElement("div");
+            box.className = "preview-item";
+            box.innerHTML = `
+                <img src="${e.target.result}" class="preview-img">
+                <button class="remove-img-btn" onclick="removeNewImage(${idx})">&times;</button>
+            `;
+            area.appendChild(box);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeNewImage(idx) {
+    newImages.splice(idx, 1);
+    renderNewImages();
+}
+
+// 새 파일 목록
+function renderNewFiles() {
+    const list = document.getElementById("fileList");
+
+    newFiles.forEach((file, idx) => {
+        list.innerHTML += `
+            <li class="file-item">
+                <span>📄 ${file.name}</span>
+                <button class="remove-file-btn" onclick="removeNewFile(${idx})">&times;</button>
+            </li>
+        `;
+    });
+}
+
+function removeNewFile(idx) {
+    newFiles.splice(idx, 1);
+    renderNewFiles();
+}
+
+// 파일 업로드 helper
+async function uploadToStorage(file, folder) {
+    const filename = `${Date.now()}_${file.name}`;
+    const path = `${folder}/${filename}`;
+
+    const { error } = await supabase.storage
         .from("qna_uploads")
-        .remove([fileName]);
+        .upload(path, file);
 
-    oldFilePath = null;
+    if (error) console.error(error);
+
+    return `https://glmytzfqxdtlhmzbcsgd.supabase.co/storage/v1/object/public/qna_uploads/${path}`;
 }
 
+// 수정 저장
+async function updateQna() {
+    const title = document.getElementById("title").value.trim();
+    const content = document.getElementById("content").value.trim();
 
-// ============================
-// ✔ 글 저장
-// ============================
-async function saveEdit() {
-    const title = document.getElementById("titleInput").value.trim();
-    const content = document.getElementById("contentInput").value.trim();
+    let uploadedImages = [...oldImages];
+    let uploadedFiles = [...oldFiles];
 
-    if (!title || !content) {
-        alert("모든 내용을 입력하세요!");
-        return;
+    // 새 이미지 업로드
+    for (const img of newImages) {
+        uploadedImages.push(await uploadToStorage(img, "images"));
     }
-
-    let file_url = oldFilePath;
 
     // 새 파일 업로드
-    if (newUploadedFile) {
-        const fileName = `${Date.now()}_${newUploadedFile.name}`;
-
-        const { error: uploadError } = await supabase.storage
-            .from("qna_uploads")
-            .upload(fileName, newUploadedFile);
-
-        if (uploadError) {
-            alert("파일 업로드 실패!");
-            return;
-        }
-
-        // 기존 파일 삭제
-        if (oldFilePath) await deleteOldFile();
-
-        const { data } = supabase.storage
-            .from("qna_uploads")
-            .getPublicUrl(fileName);
-
-        file_url = data.publicUrl;
+    for (const file of newFiles) {
+        uploadedFiles.push(await uploadToStorage(file, "files"));
     }
 
-    // DB 업데이트
     const { error } = await supabase
         .from("qna")
-        .update({ title, content, file_url })
+        .update({
+            title,
+            content,
+            images: uploadedImages,
+            files: uploadedFiles
+        })
         .eq("id", postId);
 
     if (error) {
-        alert("수정 실패");
+        alert("수정 실패!");
         return;
     }
 
     alert("수정 완료!");
-    location.href = "qna_view.html?id=" + postId;
+    location.href = `qna_view.html?id=${postId}`;
 }
-
-
-// ============================
-// ✔ 첨부 삭제 버튼 눌렀을 때
-// ============================
-document.getElementById("deleteFileBtn").addEventListener("click", async () => {
-    if (!confirm("첨부파일을 삭제하시겠습니까?")) return;
-
-    await deleteOldFile();
-
-    oldFilePath = null;
-    newUploadedFile = null;
-
-    document.getElementById("previewImage").style.display = "none";
-    document.getElementById("fileName").innerText = "";
-    document.getElementById("fileInput").value = "";
-    document.getElementById("deleteFileBtn").style.display = "none";
-});

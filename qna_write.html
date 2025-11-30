@@ -141,7 +141,6 @@
 .submit-btn:hover {
     background: #1665d9;
 }
-
 </style>
 </head>
 
@@ -182,89 +181,7 @@
     <button class="submit-btn" onclick="submitQna()">등록하기</button>
 </main>
 
-<script>
-const supabase = window.supabase.createClient(
-  "https://glmytzfqxdtlhmzbcsgd.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
-);
+<script src="qna_write.js"></script>
 
-// 이미지 미리보기
-const imgDropBox = document.getElementById("imgDropBox");
-const imgUpload = document.getElementById("imgUpload");
-const previewArea = document.getElementById("previewImages");
-
-imgDropBox.addEventListener("click", () => imgUpload.click());
-imgUpload.addEventListener("change", () => {
-    [...imgUpload.files].forEach(file => previewImage(file));
-});
-
-function previewImage(file) {
-    const reader = new FileReader();
-    reader.onload = e => {
-        const box = document.createElement("div");
-        box.className = "preview-item";
-        box.innerHTML = `
-            <img src="${e.target.result}" class="preview-img">
-            <button class="remove-img-btn">&times;</button>
-        `;
-        box.querySelector(".remove-img-btn").addEventListener("click", () => {
-            box.remove();
-        });
-        previewArea.appendChild(box);
-    };
-    reader.readAsDataURL(file);
-}
-
-// 파일 업로드
-const fileDropBox = document.getElementById("fileDropBox");
-const fileUpload = document.getElementById("fileUpload");
-const fileList = document.getElementById("fileList");
-
-fileDropBox.addEventListener("click", () => fileUpload.click());
-fileUpload.addEventListener("change", () => {
-    [...fileUpload.files].forEach(file => addFileItem(file));
-});
-
-function addFileItem(file) {
-    const li = document.createElement("li");
-    li.className = "file-item";
-    li.innerHTML = `
-        <span class="file-icon">📄</span>
-        <span>${file.name}</span>
-        <button class="remove-file-btn">&times;</button>
-    `;
-    li.querySelector(".remove-file-btn").addEventListener("click", () => {
-        li.remove();
-    });
-    fileList.appendChild(li);
-}
-
-// 등록 처리
-async function submitQna() {
-    const title = document.getElementById("title").value.trim();
-    const content = document.getElementById("content").value.trim();
-    const user = JSON.parse(localStorage.getItem("loggedUser"));
-
-    if (!user) return alert("로그인 후 작성 가능합니다!");
-    if (!title || !content) return alert("제목과 내용을 입력해주세요!");
-
-    const { error } = await supabase
-        .from("qna")
-        .insert({
-            title,
-            content,
-            writer: user.id,
-            views: 0
-        });
-
-    if (error) {
-        alert("등록 실패!");
-        return;
-    }
-
-    alert("질문이 등록되었습니다!");
-    location.href = "qna.html";
-}
-</script>
 </body>
 </html>

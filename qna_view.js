@@ -7,9 +7,9 @@ const supabase = window.supabase.createClient(
 
 const params = new URLSearchParams(location.search);
 const postId = params.get("id");
-
 const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 
+// 초기 로드
 document.addEventListener("DOMContentLoaded", () => {
     loadPost();
     loadReplies();
@@ -24,10 +24,11 @@ async function loadPost() {
         .from("qna")
         .select("*")
         .eq("id", postId)
-        .maybeSingle();
+        .single();
 
-    if (error || !data) {
-        alert("게시글을 불러오지 못했습니다.");
+    if (error) {
+        console.error(error);
+        alert("게시글을 불러올 수 없습니다");
         return;
     }
 
@@ -38,66 +39,41 @@ async function loadPost() {
     document.getElementById("views").innerText = data.views + 1;
 
     // 조회수 증가
-    await supabase.from("qna").update({ views: data.views + 1 }).eq("id", postId);
+    supabase.from("qna").update({ views: data.views + 1 }).eq("id", postId);
+
+    // 이미지 표시
+    let imageArea = document.getElementById("imageArea");
+    imageArea.innerHTML = "";
+    (data.images || []).forEach(url => {
+        imageArea.innerHTML += `
+            <div class="view-image-item">
+                <img src="${url}" onclick="window.open('${url}')">
+            </div>
+        `;
+    });
+
+    // 파일 표시
+    let fileArea = document.getElementById("fileArea");
+    fileArea.innerHTML = "";
+    (data.files || []).forEach(url => {
+        fileArea.innerHTML += `
+            <li class="file-item">
+                <span>📄</span>
+                <a href="${url}" download>${url.split("/").pop()}</a>
+            </li>
+        `;
+    });
 
     // 수정/삭제 권한
     if (loggedUser && (loggedUser.id === data.writer || loggedUser.role === "admin")) {
         document.getElementById("editBtn").style.display = "inline-block";
         document.getElementById("deleteBtn").style.display = "inline-block";
+
+        document.getElementById("editBtn").onclick = () => {
+            location.href = `qna_edit.html?id=${postId}`;
+        };
+        document.getElementById("deleteBtn").onclick = deletePost;
     }
-
-    document.getElementById("editBtn").onclick = () => {
-        location.href = `qna_edit.html?id=${postId}`;
-    };
-    document.getElementById("deleteBtn").onclick = deletePost;
-
-    // 첨부파일 표시
-    if (data.file_url) renderFileBox(data.file_url);
-}
-
-
-// ============================
-// ✔ 첨부파일 표시
-// ============================
-function renderFileBox(url) {
-    const box = document.getElementById("fileBox");
-    box.style.display = "block";
-
-    const fileName = url.split("/").pop().toLowerCase();
-
-    // 이미지면 미리보기
-    if (fileName.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
-        box.innerHTML = `
-            <p>📎 첨부 이미지</p>
-            <img src="${url}" class="view-img" id="viewImage">
-        `;
-
-        // 클릭하면 확대
-        document.getElementById("viewImage").onclick = () => openImageModal(url);
-
-    } else {
-        // 일반 파일 (PDF, HWP 등)
-        box.innerHTML = `
-            <p>📎 첨부 파일</p>
-            <a href="${url}" target="_blank">${fileName}</a>
-        `;
-    }
-}
-
-
-// ============================
-// ✔ 이미지 확대 모달
-// ============================
-function openImageModal(url) {
-    const modal = document.getElementById("imgModal");
-    const modalImg = document.getElementById("modalImage");
-    modalImg.src = url;
-
-    modal.style.display = "flex";
-
-    modal.onclick = () => {
-        modal.style.display = "none";
-    };
 }
 
 
@@ -108,22 +84,24 @@ async function deletePost() {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
     await supabase.from("qna").delete().eq("id", postId);
-    alert("삭제되었습니다.");
+    alert("삭제되었습니다!");
     location.href = "qna.html";
 }
 
 
 // ============================
-// ✔ 답글 불러오기
+// ✔ 답글 목록 불러오기
 // ============================
 async function loadReplies() {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from("qna_reply")
         .select("*")
         .eq("post_id", postId)
         .order("id");
 
-    const box = document.getElementById("replyList");
+    if (error) return;
+
+    let box = document.getElementById("replyList");
     box.innerHTML = "";
 
     data.forEach(r => {
@@ -141,21 +119,15 @@ async function loadReplies() {
 // ✔ 답글 작성
 // ============================
 async function addReply() {
-    if (!loggedUser) {
-        alert("로그인이 필요합니다.");
-        return;
-    }
+    if (!loggedUser) return alert("로그인이 필요합니다.");
 
-    const text = document.getElementById("replyInput").value.trim();
-    if (!text) {
-        alert("내용을 입력해주세요.");
-        return;
-    }
+    const content = document.getElementById("replyInput").value.trim();
+    if (!content) return alert("내용을 입력하세요");
 
     await supabase.from("qna_reply").insert({
         post_id: postId,
         writer: loggedUser.id,
-        content: text
+        content
     });
 
     document.getElementById("replyInput").value = "";

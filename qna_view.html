@@ -1,142 +1,159 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>질문 상세보기</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8" />
+<title>질문 상세보기 | HANBOM GALLERY</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        .qna-view-box {
-            max-width: 850px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 14px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        .qna-title {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .qna-info {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 18px;
-        }
-        .qna-content {
-            white-space: pre-line;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
+<style>
+/* ====== VIEW PAGE 고급 스타일 ====== */
+.view-wrap {
+  width: 850px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
 
-        /* 첨부파일 */
-        .file-box {
-            margin-top: 20px;
-            padding: 14px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-        }
-        .file-box a {
-            color: #0369a1;
-            font-weight: 600;
-        }
-        .view-img {
-            max-width: 280px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+.view-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
 
-        /* 버튼 */
-        .view-btns {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
+.view-info {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
 
-        /* 답글 */
-        .reply-item {
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .reply-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+.view-content {
+  padding: 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  border-radius: 12px;
+  background: #f9fafb;
+  margin-bottom: 22px;
+}
 
-        /* ⬆ 이미지 확대 모달 */
-        .modal-img-wrapper {
-            display:none;
-            position: fixed;
-            top:0; left:0;
-            width:100%; height:100%;
-            background: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .modal-img-wrapper img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 14px;
-        }
-    </style>
+/* 이미지 갤러리 */
+.view-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.view-image-item {
+  position: relative;
+}
+.view-image-item img {
+  width: 100%;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.view-image-item img:hover {
+  opacity: 0.85;
+}
+
+/* 파일 목록 */
+.file-list {
+  list-style:none;
+  padding:0;
+}
+.file-item {
+  background:#eef2f7;
+  padding:10px 14px;
+  border-radius:10px;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+}
+.file-item span {
+  margin-right:8px;
+  font-size:18px;
+}
+
+/* 버튼 영역 */
+.view-btns {
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+}
+
+/* 댓글(답글) 입력 */
+.reply-input {
+  width:100%;
+  height:90px;
+  resize:none;
+  font-size:14px;
+  padding:10px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.reply-box {
+  margin-top:18px;
+}
+.reply-item {
+  padding:12px 14px;
+  background:#f3f4f6;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.reply-item b {
+  font-size:14px;
+}
+</style>
 </head>
+
 <body>
 
 <header class="header">
-    <a href="index.html" class="logo">
-        <img src="hanbom.png">
-        <span>HANBOM GALLERY</span>
-    </a>
+  <a href="index.html" class="logo">
+    <img src="hanbom.png" />
+    <span>HANBOM GALLERY</span>
+  </a>
 </header>
 
-<div class="qna-view-box">
+<main class="view-wrap">
+  <h2 id="title" class="view-title"></h2>
 
-    <h2 class="qna-title" id="title"></h2>
+  <p class="view-info">
+    작성자 <span id="writer"></span> · 
+    <span id="date"></span> · 
+    조회수 <span id="views"></span>
+  </p>
 
-    <p class="qna-info">
-        작성자: <span id="writer"></span> · 
-        날짜: <span id="date"></span> · 
-        조회수: <span id="views"></span>
-    </p>
+  <div id="content" class="view-content"></div>
 
-    <div id="content" class="qna-content"></div>
+  <!-- 이미지 -->
+  <div id="imageArea" class="view-images"></div>
 
-    <!-- 첨부파일 영역 -->
-    <div id="fileBox" class="file-box" style="display:none"></div>
+  <!-- 파일 -->
+  <h3 style="margin-top:15px;">📎 첨부 파일</h3>
+  <ul id="fileArea" class="file-list"></ul>
 
-    <div class="view-btns">
-        <button id="editBtn" class="btn-primary" style="display:none">수정</button>
-        <button id="deleteBtn" class="btn-primary" style="background:#d9534f; display:none">삭제</button>
-        <button class="btn-primary" onclick="location.href='qna.html'">목록</button>
-    </div>
+  <!-- 버튼 -->
+  <div class="view-btns">
+    <button id="editBtn" class="btn-primary" style="display:none;">수정</button>
+    <button id="deleteBtn" class="btn-primary" style="background:#d9534f; display:none;">삭제</button>
+    <button class="btn-primary" onclick="location.href='qna.html'">목록</button>
+  </div>
 
-    <hr style="margin:25px 0;">
+  <hr style="margin:25px 0;" />
 
-    <h3>답글</h3>
-    <div id="replyList"></div>
+  <h3>답글</h3>
+  <div id="replyList" class="reply-box"></div>
 
-    <textarea id="replyInput" class="reply-input" placeholder="답글을 입력하세요"></textarea>
-    <button class="btn-primary" onclick="addReply()">답글 등록</button>
-</div>
-
-
-<!-- 이미지 확대 모달 -->
-<div id="imgModal" class="modal-img-wrapper">
-    <img id="modalImage">
-</div>
+  <textarea id="replyInput" class="reply-input" placeholder="답글을 입력하세요"></textarea>
+  <button class="btn-primary" onclick="addReply()">등록</button>
+</main>
 
 <script src="qna_view.js"></script>
-
 </body>
 </html>
