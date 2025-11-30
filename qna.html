@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>질문 & 답변 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<!-- 헤더 -->
+<header class="header">
+    <a href="index.html" class="logo">
+        <img src="hanbom.png" alt="logo">
+        <span>HANBOM GALLERY</span>
+    </a>
+
+    <nav class="nav">
+      <a href="index.html">홈</a>
+      <a href="notice.html">공지사항</a>
+      <a href="index.html">자유게시판</a>
+      <a href="qna.html" style="color:#1f6feb; font-weight:700;">질문답변</a>
+      <a href="info.html">정보공유</a>
+    </nav>
+
+    <div class="auth-buttons">
+        <a href="login.html" class="btn-login">로그인</a>
+        <a href="register.html" class="btn-signup">회원가입</a>
+    </div>
+
+    <div class="admin-buttons"></div>
+</header>
+
+
+<!-- 메인 레이아웃 -->
+<main class="container">
+
+  <!-- 왼쪽 메인 영역 -->
+  <section class="main-content">
+
+      <!-- 상단 탭 -->
+      <div class="board-tabs">
+        <a href="index.html" class="tab">자유 게시판</a>
+        <a href="qna.html" class="tab active">질문 & 답변</a>
+        <a href="info.html" class="tab">정보 공유</a>
+      </div>
+
+      <!-- 글쓰기 버튼 + 검색창 -->
+      <div class="toolbar">
+        <button class="btn-primary" onclick="location.href='qna_write.html'">✏️ 글쓰기</button>
+        <div class="search-box">
+          <input type="text" id="qnaSearch" placeholder="검색어를 입력하세요">
+        </div>
+      </div>
+
+      <!-- 질문 리스트 테이블 -->
+      <table class="post-table">
+        <thead>
+          <tr>
+            <th class="col-category">말머리</th>
+            <th class="col-title">제목</th>
+            <th class="col-writer">작성자</th>
+            <th class="col-date">날짜</th>
+            <th class="col-views">조회</th>
+          </tr>
+        </thead>
+
+        <tbody id="qna-list">
+          <!-- qna.js에서 불러옴 -->
+        </tbody>
+      </table>
+
+      <div class="pagination" id="pagination"></div>
+  </section>
+
+
+  <!-- 오른쪽 사이드바 -->
+  <aside class="sidebar">
+
+    <div class="card" id="login-card"></div>
+
+    <div class="card">
+      <h3>📢 공지사항</h3>
+      <ul class="simple-list" id="sidebar-notice"></ul>
+    </div>
+
+    <div class="card">
+      <h3>🔥 인기 글 TOP 5</h3>
+      <ol class="rank-list" id="topPosts"></ol>
+    </div>
+
+    <div class="card">
+      <h3>🏷️ 인기 태그</h3>
+      <div class="tag-list">
+        <span class="tag">#질문</span>
+        <span class="tag">#도움</span>
+        <span class="tag">#학교</span>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+
+<script>
+  const supabase = window.supabase.createClient(
+    "https://glmytzfqxdtlhmzbcsgd.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
+  );
+</script>
+
+<script src="login.js"></script>
+<script src="qna.js"></script>
+<script src="index.js"></script>
+
+</body>
+</html>

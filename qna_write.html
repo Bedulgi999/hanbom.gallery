@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>질문 작성 | HANBOM GALLERY</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* 전체 WRAP */
+.write-container {
+    width: 850px;
+    margin: 30px auto;
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* 제목 입력 */
+.write-title {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d0d7de;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 15px;
+}
+
+/* 내용 */
+.write-textarea {
+    width: 100%;
+    height: 180px;
+    padding: 14px;
+    border: 1px solid #d0d7de;
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 22px;
+}
+
+/* 라벨 */
+.write-label {
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* 이미지 업로드 */
+.image-dropbox {
+    border: 2px dashed #b6c2d3;
+    background: #f8fafc;
+    padding: 30px;
+    border-radius: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.image-dropbox:hover {
+    background: #eef3f7;
+}
+
+.upload-icon {
+    width: 42px;
+    opacity: 0.6;
+    margin-bottom: 8px;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.preview-item {
+    position: relative;
+}
+.preview-img {
+    width: 100%;
+    height:140px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+.remove-img-btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+/* 파일 업로드 */
+.file-dropbox {
+    border: 2px dashed #c6cfda;
+    background: #fafafa;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+    color: #636c76;
+    cursor: pointer;
+}
+.file-item {
+    display:flex;
+    align-items:center;
+    padding: 10px;
+    background: #ffffff;
+    margin-top: 8px;
+    border-radius: 10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+.file-icon {
+    font-size: 20px;
+    margin-right: 8px;
+}
+.remove-file-btn {
+    margin-left:auto;
+    font-size: 20px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    color:#475569;
+}
+
+/* 등록 버튼 */
+.submit-btn {
+    margin-top: 25px;
+    width: 100%;
+    padding: 14px;
+    background: #1f6feb;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.submit-btn:hover {
+    background: #1665d9;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <a href="index.html" class="logo">
+        <img src="hanbom.png" alt="logo">
+        <span>HANBOM GALLERY</span>
+    </a>
+</header>
+
+<main class="write-container">
+
+    <h2 style="margin-bottom:16px;">질문 작성</h2>
+
+    <input id="title" class="write-title" placeholder="제목을 입력하세요">
+
+    <textarea id="content" class="write-textarea" placeholder="내용을 입력하세요"></textarea>
+
+    <!-- 이미지 업로드 -->
+    <label class="write-label">이미지 업로드</label>
+    <div id="imgDropBox" class="image-dropbox">
+        <img src="upload_icon.png" class="upload-icon">
+        <p>클릭하거나 이미지를 드래그하세요</p>
+        <input id="imgUpload" type="file" accept="image/*" multiple hidden>
+    </div>
+    <div id="previewImages" class="preview-grid"></div>
+
+    <!-- 파일 첨부 -->
+    <label class="write-label" style="margin-top:22px;">파일 첨부</label>
+    <div id="fileDropBox" class="file-dropbox">
+        파일을 선택하거나 드래그 하세요
+        <input id="fileUpload" type="file" multiple hidden>
+    </div>
+    <ul id="fileList"></ul>
+
+    <button class="submit-btn" onclick="submitQna()">등록하기</button>
+</main>
+
+<script>
+const supabase = window.supabase.createClient(
+  "https://glmytzfqxdtlhmzbcsgd.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
+);
+
+// 이미지 미리보기
+const imgDropBox = document.getElementById("imgDropBox");
+const imgUpload = document.getElementById("imgUpload");
+const previewArea = document.getElementById("previewImages");
+
+imgDropBox.addEventListener("click", () => imgUpload.click());
+imgUpload.addEventListener("change", () => {
+    [...imgUpload.files].forEach(file => previewImage(file));
+});
+
+function previewImage(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+        const box = document.createElement("div");
+        box.className = "preview-item";
+        box.innerHTML = `
+            <img src="${e.target.result}" class="preview-img">
+            <button class="remove-img-btn">&times;</button>
+        `;
+        box.querySelector(".remove-img-btn").addEventListener("click", () => {
+            box.remove();
+        });
+        previewArea.appendChild(box);
+    };
+    reader.readAsDataURL(file);
+}
+
+// 파일 업로드
+const fileDropBox = document.getElementById("fileDropBox");
+const fileUpload = document.getElementById("fileUpload");
+const fileList = document.getElementById("fileList");
+
+fileDropBox.addEventListener("click", () => fileUpload.click());
+fileUpload.addEventListener("change", () => {
+    [...fileUpload.files].forEach(file => addFileItem(file));
+});
+
+function addFileItem(file) {
+    const li = document.createElement("li");
+    li.className = "file-item";
+    li.innerHTML = `
+        <span class="file-icon">📄</span>
+        <span>${file.name}</span>
+        <button class="remove-file-btn">&times;</button>
+    `;
+    li.querySelector(".remove-file-btn").addEventListener("click", () => {
+        li.remove();
+    });
+    fileList.appendChild(li);
+}
+
+// 등록 처리
+async function submitQna() {
+    const title = document.getElementById("title").value.trim();
+    const content = document.getElementById("content").value.trim();
+    const user = JSON.parse(localStorage.getItem("loggedUser"));
+
+    if (!user) return alert("로그인 후 작성 가능합니다!");
+    if (!title || !content) return alert("제목과 내용을 입력해주세요!");
+
+    const { error } = await supabase
+        .from("qna")
+        .insert({
+            title,
+            content,
+            writer: user.id,
+            views: 0
+        });
+
+    if (error) {
+        alert("등록 실패!");
+        return;
+    }
+
+    alert("질문이 등록되었습니다!");
+    location.href = "qna.html";
+}
+</script>
+</body>
+</html>
