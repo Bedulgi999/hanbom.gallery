@@ -399,3 +399,84 @@ button {
 .btn-logout:hover {
     background: #e5e7eb;
 }
+
+/* ==============================
+   📱 모바일 전용 반응형 (max-width: 768px)
+   ============================== */
+@media (max-width: 768px) {
+
+  /* 전체 레이아웃 한 줄 → 세로 배치 */
+  .container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    gap: 16px;
+  }
+
+  /* 사이드바를 메인 아래로 */
+  .sidebar {
+    order: 2;
+    width: 100%;
+  }
+
+  /* 메인 콘텐츠는 위로 */
+  .main-content {
+    order: 1;
+    width: 100%;
+  }
+
+  /* 헤더 패딩 축소 */
+  .header {
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* 로고 크기 조정 */
+  .logo img {
+    height: 32px;
+  }
+
+  .logo span {
+    font-size: 18px;
+  }
+
+  /* 네비게이션 메뉴 세로 정렬 */
+  .nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .nav a {
+    padding: 6px 10px;
+  }
+
+  /* 게시판 테이블 모바일 최적화 */
+  .post-table thead {
+    display: none;  /* 헤더 삭제(모바일 카드 형태로 변환) */
+  }
+  .post-table tr {
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  }
+  .post-table td {
+    display: block;
+    padding: 4px 0;
+    border: none;
+  }
+  .col-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* 로그인/공지/인기글 카드 폭 100% */
+  .card {
+    width: 100%;
+  }
+}
