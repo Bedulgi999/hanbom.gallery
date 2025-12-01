@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>우리 학교 커뮤니티</title>
+
+  <!-- 📱 모바일 반응형 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
   <!-- 상단 헤더 -->
   <header class="header">
+
+    <!-- 로고 -->
     <a href="index.html" class="logo">
         <img src="hanbom.png" alt="학교 로고">
         <span>HANBOM GALLERY</span>
     </a>
 
+    <!-- 네비게이션 -->
     <nav class="nav">
       <a href="index.html">홈</a>
       <a href="#">공지사항</a>
@@ -24,18 +29,38 @@
       <a href="#">동아리</a>
     </nav>
 
+    <!-- 로그인/회원가입 -->
     <div class="auth-buttons">
         <a href="login.html" class="btn-login">로그인</a>
         <a href="register.html" class="btn-signup">회원가입</a>
     </div>
 
+    <!-- admin 버튼 -->
     <div class="admin-buttons"></div>
-  </header> 
+
+    <!-- 📱 모바일 햄버거 메뉴 버튼 -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+  </header>
+
+  <!-- 📱 모바일 사이드 메뉴 -->
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="mobile-menu-inner">
+        <button class="close-btn" onclick="toggleMobileMenu()">✕</button>
+
+        <div id="mobileMenuContent">
+            <!-- JS에서 자동으로 로그인/로그아웃/회원가입 채워짐 -->
+        </div>
+    </div>
+  </div>
+
 
   <!-- 메인 레이아웃 -->
   <main class="container">
-    <!-- 왼쪽: 게시판 목록 -->
+
+    <!-- 왼쪽 메인 콘텐츠 -->
     <section class="main-content">
+
       <!-- 상단 탭 -->
       <div class="board-tabs">
         <a href="index.html" class="tab active">자유 게시판</a>
@@ -43,7 +68,7 @@
         <a href="info.html" class="tab">정보 공유</a>
       </div>
 
-      <!-- 글 작성 버튼 + 검색 -->
+      <!-- 글쓰기 + 검색 -->
       <div class="toolbar">
         <button class="btn-primary">✏️ 글쓰기</button>
         <div class="search-box">
@@ -62,46 +87,9 @@
             <th class="col-views">조회</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="notice-row">
-            <td>[공지]</td>
-            <td>[필독] 커뮤니티 이용 수칙 안내</td>
-            <td>운영자</td>
-            <td>2025-03-01</td>
-            <td>1023</td>
-          </tr>
-          <tr>
-            <td>[잡담]</td>
-            <td>내일 급식 메뉴 아는 사람? 🤔</td>
-            <td>2학년_철수</td>
-            <td>2025-03-10</td>
-            <td>120</td>
-          </tr>
-          <tr>
-            <td>[질문]</td>
-            <td>정보 수행평가 했던 사람..? 난이도 어떰</td>
-            <td>1학년_민지</td>
-            <td>2025-03-10</td>
-            <td>98</td>
-          </tr>
-          <tr>
-            <td>[정보]</td>
-            <td>네트워크 자격증 공부 자료 공유합니다</td>
-            <td>3학년_현수</td>
-            <td>2025-03-09</td>
-            <td>87</td>
-          </tr>
-          <tr>
-            <td>[동아리]</td>
-            <td>코딩 동아리 신규 부원 모집 중 💻</td>
-            <td>동아리장</td>
-            <td>2025-03-09</td>
-            <td>231</td>
-          </tr>
-        </tbody>
+        <tbody id="main-list"></tbody>
       </table>
 
-      <!-- 페이지네이션 -->
       <div class="pagination">
         <button class="page-btn disabled">〈</button>
         <button class="page-btn active">1</button>
@@ -109,12 +97,14 @@
         <button class="page-btn">3</button>
         <button class="page-btn">〉</button>
       </div>
+
     </section>
 
-    <!-- 오른쪽: 사이드바 -->
+    <!-- 오른쪽 사이드바 -->
     <aside class="sidebar">
+
       <!-- 로그인 카드 -->
-      <div class="card">
+      <div class="card" id="sidebar-login-card">
         <h3>로그인</h3>
         <form class="login-form">
           <input type="text" placeholder="아이디">
@@ -128,29 +118,19 @@
         </div>
       </div>
 
-      <!-- 공지사항 카드 -->
+      <!-- 공지사항 -->
       <div class="card">
         <h3>📢 공지사항</h3>
-        <ul class="simple-list">
-          <li>[공지] 2025학년도 학교 축제 일정 안내</li>
-          <li>[공지] 시험 기간 커뮤니티 운영 시간 조정</li>
-          <li>[공지] 비매너/욕설 게시글 제재 안내</li>
-        </ul>
+        <ul class="simple-list" id="sidebar-notice"></ul>
       </div>
 
-      <!-- 인기글 카드 -->
+      <!-- 인기 글 -->
       <div class="card">
         <h3>🔥 인기 글 TOP 5</h3>
-        <ol class="rank-list">
-          <li>이번 시험 난이도 솔직 후기</li>
-          <li>우리 반 레전드 썰 모음</li>
-          <li>선배가 알려주는 공부 꿀팁</li>
-          <li>급식 BEST & WORST 메뉴 투표</li>
-          <li>학교 근처 맛집 추천 받습니다</li>
-        </ol>
+        <ol class="rank-list" id="topPosts"></ol>
       </div>
 
-      <!-- 태그 카드 -->
+      <!-- 태그 -->
       <div class="card">
         <h3>🏷️ 인기 태그</h3>
         <div class="tag-list">
@@ -162,7 +142,9 @@
           <span class="tag">#진로</span>
         </div>
       </div>
+
     </aside>
+
   </main>
 
   <!-- 푸터 -->
@@ -176,14 +158,8 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabase = window.supabase.createClient(
-    "https://glmytzfqxdtlhmzbcsgd.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
-  );
-</script>
+  <script src="login.js"></script>
+  <script src="index.js"></script>
 
-<script src="login.js"></script>
-<script src="index.js"></script>
 </body>
 </html>
