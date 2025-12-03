@@ -77,8 +77,20 @@
 
   <!-- 오른쪽 사이드바 -->
   <aside class="sidebar">
-
-    <div class="card" id="login-card"></div>
+      <!-- 로그인 카드 -->
+      <div class="card">
+        <h3>로그인</h3>
+        <form class="login-form">
+          <input type="text" placeholder="아이디">
+          <input type="password" placeholder="비밀번호">
+          <button type="submit" class="btn-primary full">로그인</button>
+        </form>
+        <div class="login-links">
+          <a href="register.html">회원가입</a>
+          <span>·</span>
+          <a href="#">아이디/비밀번호 찾기</a>
+        </div>
+      </div>
 
     <div class="card">
       <h3>📢 공지사항</h3>
@@ -114,6 +126,7 @@
 <script src="login.js"></script>
 <script src="qna.js"></script>
 <script src="index.js"></script>
+<script src="sidebar.js"></script>
 
 </body>
 </html>

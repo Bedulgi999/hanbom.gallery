@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공지사항 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo">
+      <img src="hanbom.png" alt="logo">
+      <span>HANBOM GALLERY</span>
+  </a>
+
+  <nav class="nav">
+    <a href="index.html">홈</a>
+    <a href="notice.html" style="color:#1f6feb;font-weight:700;">공지사항</a>
+    <a href="index.html">자유게시판</a>
+    <a href="qna.html">질문답변</a>
+    <a href="info.html">정보공유</a>
+  </nav>
+
+  <div id="authBox" class="auth-buttons"></div>
+</header>
+
+<main class="container">
+  <section class="main-content">
+    <h2 style="margin-bottom:10px;">📢 공지사항</h2>
+
+    <div class="toolbar">
+        <button id="writeNoticeBtn" class="btn-primary" style="display:none;">✏️ 공지 작성</button>
+        <div class="search-box">
+          <input type="text" id="noticeSearch" placeholder="검색어를 입력하세요">
+        </div>
+    </div>
+
+    <table class="post-table">
+      <thead>
+        <tr>
+          <th>분류</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>날짜</th>
+          <th>조회</th>
+        </tr>
+      </thead>
+      <tbody id="noticeList"></tbody>
+    </table>
+  </section>
+
+    <!-- 오른쪽: 사이드바 -->
+    <aside class="sidebar">
+      <!-- 로그인 카드 -->
+      <div class="card">
+        <h3>로그인</h3>
+        <form class="login-form">
+          <input type="text" placeholder="아이디">
+          <input type="password" placeholder="비밀번호">
+          <button type="submit" class="btn-primary full">로그인</button>
+        </form>
+        <div class="login-links">
+          <a href="register.html">회원가입</a>
+          <span>·</span>
+          <a href="#">아이디/비밀번호 찾기</a>
+        </div>
+      </div>
+
+      <!-- 공지사항 카드 -->
+
+  <aside class="sidebar">
+      <div class="card">
+        <h3>📢 공지사항</h3>
+        <ul class="simple-list" id="sidebar-notice"></ul>
+      </div>
+
+      <div class="card">
+        <h3>🔥 인기 글 TOP 5</h3>
+        <ol class="rank-list" id="topPosts"></ol>
+      </div>
+
+
+      <!-- 태그 카드 -->
+      <div class="card">
+        <h3>🏷️ 인기 태그</h3>
+        <div class="tag-list">
+          <span class="tag">#시험</span>
+          <span class="tag">#수행평가</span>
+          <span class="tag">#동아리</span>
+          <span class="tag">#축제</span>
+          <span class="tag">#게임</span>
+          <span class="tag">#진로</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+<script>
+  const supabase = window.supabase.createClient(
+    "https://glmytzfqxdtlhmzbcsgd.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
+  );
+</script>
+
+<script src="notice.js"></script>
+
+</body>
+</html>

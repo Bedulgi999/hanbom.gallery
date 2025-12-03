@@ -26,20 +26,49 @@ async function loadPost() {
         .eq("id", postId)
         .single();
 
-    if (error) {
-        console.error(error);
-        alert("게시글을 불러올 수 없습니다");
+    if (error || !data) {
+        alert("게시글을 불러오지 못했습니다.");
         return;
     }
 
     document.getElementById("title").innerText = data.title;
     document.getElementById("writer").innerText = data.writer;
     document.getElementById("date").innerText = data.created_at.split("T")[0];
-    document.getElementById("content").innerText = data.content;
     document.getElementById("views").innerText = data.views + 1;
 
-    // 조회수 증가
-    supabase.from("qna").update({ views: data.views + 1 }).eq("id", postId);
+    // ⭐ 조회수 증가 실행
+    increaseViews();
+
+    // ========================
+    // ✔ 조회수 증가(안전한 방식)
+    // ========================
+    async function increaseViews() {
+        const { data: current, error: readError } = await supabase
+            .from("qna")
+            .select("views")
+            .eq("id", postId)
+            .single();
+
+        if (readError) {
+            console.log("조회수 읽기 오류", readError);
+            return;
+        }
+
+        const newViews = (current.views || 0) + 1;
+
+        const { error: updateError } = await supabase
+            .from("qna")
+            .update({ views: newViews })
+            .eq("id", postId);
+
+        if (updateError) {
+            console.log("조회수 증가 실패", updateError);
+            return;
+        }
+
+        document.getElementById("views").innerText = newViews;
+    }
+
 
     // 이미지 표시
     let imageArea = document.getElementById("imageArea");

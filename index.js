@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const authButtons = document.querySelector(".auth-buttons");
     const adminButtons = document.querySelector(".admin-buttons");
     const sidebarCard = document.querySelector(".sidebar .card");
+document.addEventListener("DOMContentLoaded", () => {
+    loadTopPosts();
+});
 
     // 현재 로그인된 사용자 가져오기
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -83,19 +86,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-// =============================
-// 공지사항 로드
-// =============================
-function loadSidebarNotice() {
-    let notices = JSON.parse(localStorage.getItem("notices")) || [];
+/* -------------------------------------------------
+   ✔ 사이드바 공지사항 3개 불러오기
+--------------------------------------------------- */
+// 사이드바 공지사항 Supabase에서 최신 3개 불러오기
+async function loadSidebarNotice() {
     const box = document.getElementById("sidebar-notice");
 
-    if (!box) return;
+    let { data, error } = await supabase
+        .from("notice")
+        .select("title")
+        .order("id", { ascending: false })
+        .limit(3);
+
+    if (error) {
+        console.log(error);
+        return;
+    }
 
     box.innerHTML = "";
-
-    notices.slice(0, 3).forEach(n => {
+    data.forEach(n => {
         box.innerHTML += `<li>[공지] ${n.title}</li>`;
+    });
+}
+
+
+
+
+/* -------------------------------------------------
+   ✔ 사이드바 인기글 TOP5
+--------------------------------------------------- */
+function loadTopPosts() {
+    const box = document.getElementById("topPosts");
+    let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+    // 조회수 기준 정렬
+    posts.sort((a, b) => b.views - a.views);
+
+    box.innerHTML = "";
+    posts.slice(0, 5).forEach((p, i) => {
+        box.innerHTML += `<li>${i + 1}. ${p.title}</li>`;
     });
 }
 

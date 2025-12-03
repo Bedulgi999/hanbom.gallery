@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 보기</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+.notice-box {
+  width: 850px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.notice-files a {
+  display:block;
+  margin-top:5px;
+  color:#1f6feb;
+}
+.notice-image {
+  max-width:100%;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+</style>
+
+</head>
+<body>
+
+<header class="header">
+  <a href="notice.html" class="logo">
+    <img src="hanbom.png">
+    <span>HANBOM GALLERY</span>
+  </a>
+</header>
+
+<div class="notice-box">
+
+  <h2 id="title"></h2>
+  <p>
+    작성자: <span id="writer"></span> · 
+    날짜: <span id="date"></span> · 
+    조회수: <span id="views"></span>
+  </p>
+
+  <hr style="margin:18px 0">
+
+  <div id="content"></div>
+
+  <div id="imageBox"></div>
+
+  <div class="notice-files" id="fileBox"></div>
+
+  <div class="view-btns" style="margin-top:20px;">
+      <button class="btn-primary" onclick="location.href='notice.html'">목록</button>
+      <button id="editBtn" class="btn-primary" style="display:none;background:#444;">수정</button>
+      <button id="deleteBtn" class="btn-primary" style="display:none;background:#d9534f;">삭제</button>
+  </div>
+
+</div>
+
+<script>
+const supabase = window.supabase.createClient(
+    "https://glmytzfqxdtlhmzbcsgd.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
+);
+
+</script>
+<script src="notice_view.js"></script>
+
+</body>
+</html>
