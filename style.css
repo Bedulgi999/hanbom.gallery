@@ -30,13 +30,14 @@ button {
   top: 0;
   z-index: 10;
   display: flex;
-  align-items: center;
+  align-items: left;
   justify-content: space-between;
   gap: 24px;
   padding: 14px 40px;
   background: #ffffffcc;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #e1e5ee;
+  position: relative;   /* nav를 absolute 중앙정렬하기 위해 필요 ( 변경함) */
 }
 
 .logo {
@@ -56,11 +57,15 @@ button {
   line-height: 1;
 }
 
-/* 상단 네비게이션 */
+/* 상단 네비게이션 ( 변경함 ) */
 .nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  gap: 16px;
-  font-size: 14px;
+  gap: 28px;  /* 메뉴 간격 */
+  font-size: 16px;
+  align-items: center;
 }
 
 .nav a {
@@ -75,8 +80,12 @@ button {
 }
 
 .auth-buttons {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
-  gap: 10px;
+  gap: 10px
 }
 
 .admin-buttons {

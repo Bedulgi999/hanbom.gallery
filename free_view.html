@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>자유게시판 글보기 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    .view-wrap {
+      width: 850px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    .view-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .view-info {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .view-content {
+      padding: 18px;
+      font-size: 15px;
+      line-height: 1.6;
+      border-radius: 12px;
+      background: #f9fafb;
+      margin-bottom: 22px;
+      white-space: pre-wrap;
+    }
+
+    .view-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .view-image-item img {
+      width: 100%;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .view-image-item img:hover {
+      opacity: 0.85;
+    }
+
+    .file-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 8px;
+    }
+
+    .file-item {
+      background: #eef2f7;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .file-item span {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    .view-btns {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo">
+    <img src="hanbom.png" alt="logo" />
+    <span>HANBOM GALLERY</span>
+  </a>
+
+  <nav class="nav">
+    <a href="index.html">홈</a>
+    <a href="notice.html">공지사항</a>
+    <a href="free.html" style="color:#1f6feb; font-weight:700;">자유게시판</a>
+    <a href="qna.html">질문답변</a>
+    <a href="info.html">정보공유</a>
+  </nav>
+
+  <div class="auth-buttons" id="authButtons">
+    <a href="login.html" class="btn-login">로그인</a>
+    <a href="register.html" class="btn-signup">회원가입</a>
+  </div>
+
+  <div class="admin-buttons" id="adminButtons"></div>
+</header>
+
+<main class="view-wrap">
+  <h2 id="title" class="view-title"></h2>
+
+  <p class="view-info">
+    작성자 <span id="writer"></span> ·
+    <span id="date"></span> ·
+    조회수 <span id="views"></span>
+  </p>
+
+  <div id="content" class="view-content"></div>
+
+  <!-- 이미지 영역 -->
+  <div id="imageArea" class="view-images"></div>
+
+  <!-- 파일 영역 -->
+  <h3 style="margin-top:15px;">📎 첨부 파일</h3>
+  <ul id="fileArea" class="file-list"></ul>
+
+  <div class="view-btns">
+    <button id="editBtn" class="btn-primary" style="display:none;">수정</button>
+    <button id="deleteBtn" class="btn-primary" style="background:#d9534f; display:none;">삭제</button>
+    <button class="btn-primary" onclick="location.href='free.html'">목록</button>
+  </div>
+</main>
+
+<script src="free_view.js"></script>
+</body>
+</html>

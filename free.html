@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>공지사항 | HANBOM GALLERY</title>
+  <title>자유게시판 | HANBOM GALLERY</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -17,46 +17,65 @@
 
   <nav class="nav">
     <a href="index.html">홈</a>
-    <a href="notice.html" style="color:#1f6feb;font-weight:700;">공지사항</a>
-    <a href="free.html">자유게시판</a>
+    <a href="notice.html">공지사항</a>
+    <a href="free.html" style="color:#1f6feb; font-weight:700;">자유게시판</a>
     <a href="qna.html">질문답변</a>
     <a href="info.html">정보공유</a>
   </nav>
 
-  <!-- 로그인 / 회원가입 버튼 영역 -->
-  <div id="authBox" class="auth-buttons"></div>
+  <!-- 로그인 / 회원가입 -->
+  <div class="auth-buttons" id="authButtons">
+      <a href="login.html" class="btn-login">로그인</a>
+      <a href="register.html" class="btn-signup">회원가입</a>
+  </div>
+
+  <!-- 관리자 버튼 -->
+  <div class="admin-buttons" id="adminButtons"></div>
 </header>
 
-<main class="container">
-  <!-- 왼쪽: 공지 목록 -->
-  <section class="main-content">
-    <h2 style="margin-bottom:10px;">📢 공지사항</h2>
 
+<main class="container">
+
+  <!-- 왼쪽: 자유게시판 -->
+  <section class="main-content">
+
+    <!-- 상단 탭 -->
+    <div class="board-tabs">
+        <button class="tab active">자유 게시판</button>
+        <button class="tab" onclick="location.href='qna.html'">질문 & 답변</button>
+        <button class="tab" onclick="location.href='info.html'">정보 공유</button>
+    </div>
+
+    <!-- 글쓰기 버튼 + 검색 -->
     <div class="toolbar">
-        <button id="writeNoticeBtn" class="btn-primary" style="display:none;">✏️ 공지 작성</button>
+        <button id="writeFreeBtn" class="btn-primary" style="display:none;">✏️ 글쓰기</button>
         <div class="search-box">
-          <input type="text" id="noticeSearch" placeholder="검색어를 입력하세요">
+          <input type="text" id="freeSearch" placeholder="검색어를 입력하세요">
         </div>
     </div>
 
+    <!-- 게시판 테이블 -->
     <table class="post-table">
       <thead>
         <tr>
-          <th>분류</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>날짜</th>
-          <th>조회</th>
+          <th class="col-category">말머리</th>
+          <th class="col-title">제목</th>
+          <th class="col-writer">작성자</th>
+          <th class="col-date">날짜</th>
+          <th class="col-views">조회</th>
         </tr>
       </thead>
-      <tbody id="noticeList"></tbody>
+      <tbody id="freeList"></tbody>
     </table>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" id="pagination"></div>
+
   </section>
 
-  <!-- 오른쪽: 사이드바 -->
+  <!-- 오른쪽 사이드바 -->
   <aside class="sidebar">
-    <!-- 로그인 카드: JS에서 내용 채움 -->
-    <div id="login-card" class="card"></div>
+      <div class="card" id="login-card"></div>
 
     <!-- 공지사항 카드 -->
     <div class="card">
@@ -85,19 +104,16 @@
   </aside>
 </main>
 
+<!-- Supabase 연결 -->
 <script>
-  // 🔹 여기에 "현재 사용하는 유효한 anon public key" 를 넣어줘야 해
   const supabase = window.supabase.createClient(
     "https://glmytzfqxdtlhmzbcsgd.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
   );
 </script>
 
-<!-- 로그인 처리 -->
 <script src="login.js"></script>
-
-<!-- 공지 페이지 전용 로직 (loadAuthButtons, loadLoginCard 등) -->
-<script src="notice.js"></script>
+<script src="free.js"></script>
 
 </body>
 </html>
