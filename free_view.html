@@ -1,112 +1,123 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>자유게시판 글보기 | HANBOM GALLERY</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8" />
+<title>자유게시판 글보기 | HANBOM GALLERY</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    .view-wrap {
-      width: 850px;
-      margin: 30px auto;
-      background: #fff;
-      padding: 28px;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
+<style>
+/* ====== VIEW PAGE 고급 스타일 ====== */
+.view-wrap {
+  width: 850px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
 
-    .view-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
+.view-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
 
-    .view-info {
-      color: #6b7280;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
+.view-info {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
 
-    .view-content {
-      padding: 18px;
-      font-size: 15px;
-      line-height: 1.6;
-      border-radius: 12px;
-      background: #f9fafb;
-      margin-bottom: 22px;
-      white-space: pre-wrap;
-    }
+.view-content {
+  padding: 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  border-radius: 12px;
+  background: #f9fafb;
+  margin-bottom: 22px;
+}
 
-    .view-images {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
+/* 이미지 갤러리 */
+.view-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.view-image-item {
+  position: relative;
+}
+.view-image-item img {
+  width: 100%;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.view-image-item img:hover {
+  opacity: 0.85;
+}
 
-    .view-image-item img {
-      width: 100%;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+/* 파일 목록 */
+.file-list {
+  list-style:none;
+  padding:0;
+}
+.file-item {
+  background:#eef2f7;
+  padding:10px 14px;
+  border-radius:10px;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+}
+.file-item span {
+  margin-right:8px;
+  font-size:18px;
+}
 
-    .view-image-item img:hover {
-      opacity: 0.85;
-    }
+/* 버튼 영역 */
+.view-btns {
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+}
 
-    .file-list {
-      list-style: none;
-      padding: 0;
-      margin-top: 8px;
-    }
+/* 댓글(답글) 입력 */
+.reply-input {
+  width:100%;
+  height:90px;
+  resize:none;
+  font-size:14px;
+  padding:10px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  margin-top:10px;
+}
 
-    .file-item {
-      background: #eef2f7;
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-    }
-
-    .file-item span {
-      margin-right: 8px;
-      font-size: 18px;
-    }
-
-    .view-btns {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-  </style>
+.reply-box {
+  margin-top:18px;
+}
+.reply-item {
+  padding:12px 14px;
+  background:#f3f4f6;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.reply-item b {
+  font-size:14px;
+}
+</style>
 </head>
 
 <body>
 
 <header class="header">
   <a href="index.html" class="logo">
-    <img src="hanbom.png" alt="logo" />
+    <img src="hanbom.png" />
     <span>HANBOM GALLERY</span>
   </a>
-
-  <nav class="nav">
-    <a href="index.html">홈</a>
-    <a href="notice.html">공지사항</a>
-    <a href="free.html" style="color:#1f6feb; font-weight:700;">자유게시판</a>
-    <a href="qna.html">질문답변</a>
-    <a href="info.html">정보공유</a>
-  </nav>
-
-  <div class="auth-buttons" id="authButtons">
-    <a href="login.html" class="btn-login">로그인</a>
-    <a href="register.html" class="btn-signup">회원가입</a>
-  </div>
-
-  <div class="admin-buttons" id="adminButtons"></div>
 </header>
 
 <main class="view-wrap">
@@ -132,6 +143,14 @@
     <button id="deleteBtn" class="btn-primary" style="background:#d9534f; display:none;">삭제</button>
     <button class="btn-primary" onclick="location.href='free.html'">목록</button>
   </div>
+
+  <hr style="margin:25px 0;" />
+
+  <h3>댓글</h3>
+  <div id="replyList" class="reply-box"></div>
+
+  <textarea id="replyInput" class="reply-input" placeholder="댓글을 입력하세요"></textarea>
+  <button class="btn-primary" onclick="addReply()">등록</button>
 </main>
 
 <script src="free_view.js"></script>

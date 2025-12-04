@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>공지사항 보기 | HANBOM GALLERY</title>
+<title>정보공유 글보기 | HANBOM GALLERY</title>
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -124,25 +124,24 @@
   <h2 id="title" class="view-title"></h2>
 
   <p class="view-info">
-    작성자 <span id="writer"></span> · 
-    <span id="date"></span> · 
+    작성자 <span id="writer"></span> ·
+    <span id="date"></span> ·
     조회수 <span id="views"></span>
   </p>
 
   <div id="content" class="view-content"></div>
 
-  <!-- 이미지 -->
+  <!-- 이미지 영역 -->
   <div id="imageArea" class="view-images"></div>
 
-  <!-- 파일 -->
+  <!-- 파일 영역 -->
   <h3 style="margin-top:15px;">📎 첨부 파일</h3>
   <ul id="fileArea" class="file-list"></ul>
 
-  <!-- 버튼 -->
   <div class="view-btns">
     <button id="editBtn" class="btn-primary" style="display:none;">수정</button>
     <button id="deleteBtn" class="btn-primary" style="background:#d9534f; display:none;">삭제</button>
-    <button class="btn-primary" onclick="location.href='notice.html'">목록</button>
+    <button class="btn-primary" onclick="location.href='info.html'">목록</button>
   </div>
 
   <hr style="margin:25px 0;" />
@@ -154,14 +153,6 @@
   <button class="btn-primary" onclick="addReply()">등록</button>
 </main>
 
-<script>
-const supabase = window.supabase.createClient(
-    "https://glmytzfqxdtlhmzbcsgd.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
-);
-
-</script>
-<script src="notice_view.js"></script>
-
+<script src="info_view.js"></script>
 </body>
 </html>
