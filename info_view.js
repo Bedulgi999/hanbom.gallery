@@ -1,4 +1,4 @@
-// notice_view.js
+// info_view.js
 
 const supabase = window.supabase.createClient(
   "https://glmytzfqxdtlhmzbcsgd.supabase.co",
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================
 async function loadPost() {
     const { data, error } = await supabase
-        .from("notice")
+        .from("info")
         .select("*")
         .eq("id", postId)
         .single();
@@ -45,7 +45,7 @@ async function loadPost() {
     // ========================
     async function increaseViews() {
         const { data: current, error: readError } = await supabase
-            .from("notice")
+            .from("info")
             .select("views")
             .eq("id", postId)
             .single();
@@ -58,7 +58,7 @@ async function loadPost() {
         const newViews = (current.views || 0) + 1;
 
         const { error: updateError } = await supabase
-            .from("notice")
+            .from("info")
             .update({ views: newViews })
             .eq("id", postId);
 
@@ -94,13 +94,13 @@ async function loadPost() {
         `;
     });
 
-    // 수정/삭제 권한 (관리자만)
-    if (loggedUser && loggedUser.role === "admin") {
+    // 수정/삭제 권한
+    if (loggedUser && (loggedUser.id === data.writer || loggedUser.role === "admin")) {
         document.getElementById("editBtn").style.display = "inline-block";
         document.getElementById("deleteBtn").style.display = "inline-block";
 
         document.getElementById("editBtn").onclick = () => {
-            location.href = `notice_edit.html?id=${postId}`;
+            location.href = `info_edit.html?id=${postId}`;
         };
         document.getElementById("deleteBtn").onclick = deletePost;
     }
@@ -113,9 +113,9 @@ async function loadPost() {
 async function deletePost() {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
-    await supabase.from("notice").delete().eq("id", postId);
+    await supabase.from("info").delete().eq("id", postId);
     alert("삭제되었습니다!");
-    location.href = "notice.html";
+    location.href = "info.html";
 }
 
 
@@ -124,7 +124,7 @@ async function deletePost() {
 // ============================
 async function loadReplies() {
     const { data, error } = await supabase
-        .from("notice_reply")
+        .from("info_reply")
         .select("*")
         .eq("post_id", postId)
         .order("id");
@@ -154,7 +154,7 @@ async function addReply() {
     const content = document.getElementById("replyInput").value.trim();
     if (!content) return alert("내용을 입력하세요");
 
-    await supabase.from("notice_reply").insert({
+    await supabase.from("info_reply").insert({
         post_id: postId,
         writer: loggedUser.id,
         content
