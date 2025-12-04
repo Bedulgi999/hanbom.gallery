@@ -1,6 +1,9 @@
 // notice_view.js
 
-
+const supabase = window.supabase.createClient(
+  "https://glmytzfqxdtlhmzbcsgd.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsbXl0emZxeGR0bGhtemJjc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0Mzc4MjIsImV4cCI6MjA4MDAxMzgyMn0.8f0rAcPMUvLtY5EM9HI9uNOOOs5SKGNdC7A3U29cjyo"
+);
 
 const params = new URLSearchParams(location.search);
 const postId = params.get("id");
@@ -151,13 +154,19 @@ async function addReply() {
     const content = document.getElementById("replyInput").value.trim();
     if (!content) return alert("내용을 입력하세요");
 
-    await supabase.from("notice_reply").insert({
+    const { data, error } = await supabase.from("notice_reply").insert({
         post_id: postId,
         writer: loggedUser.id,
         content
     });
 
+    if (error) {
+        console.error("댓글 등록 실패:", error);
+        alert("댓글 등록에 실패했습니다. 콘솔을 확인하세요.");
+        return;
+    }
+
+    alert("댓글이 등록되었습니다!");
     document.getElementById("replyInput").value = "";
     loadReplies();
 }
-

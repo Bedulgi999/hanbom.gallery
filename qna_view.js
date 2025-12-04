@@ -153,12 +153,19 @@ async function addReply() {
     const content = document.getElementById("replyInput").value.trim();
     if (!content) return alert("내용을 입력하세요");
 
-    await supabase.from("qna_reply").insert({
+    const { data, error } = await supabase.from("qna_reply").insert({
         post_id: postId,
         writer: loggedUser.id,
         content
     });
 
+    if (error) {
+        console.error("답글 등록 실패:", error);
+        alert("답글 등록에 실패했습니다. 콘솔을 확인하세요.");
+        return;
+    }
+
+    alert("답글이 등록되었습니다!");
     document.getElementById("replyInput").value = "";
     loadReplies();
 }
