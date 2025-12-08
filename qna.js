@@ -115,7 +115,7 @@ async function loadSidebarNotice() {
 
     let { data, error } = await supabase
         .from("notice")
-        .select("title")
+        .select("id, title")
         .order("id", { ascending: false })
         .limit(3);
 
@@ -126,7 +126,11 @@ async function loadSidebarNotice() {
 
     box.innerHTML = "";
     data.forEach(n => {
-        box.innerHTML += `<li>[공지] ${n.title}</li>`;
+        box.innerHTML += `
+            <li onclick="location.href='notice_view.html?id=${n.id}'" style="cursor:pointer;">
+                [공지] ${n.title}
+            </li>
+        `;
     });
 }
 
@@ -136,16 +140,34 @@ async function loadSidebarNotice() {
 /* -------------------------------------------------
    ✔ 사이드바 인기글 TOP5
 --------------------------------------------------- */
-function loadTopPosts() {
+async function loadTopPosts() {
     const box = document.getElementById("topPosts");
-    let posts = JSON.parse(localStorage.getItem("posts")) || [];
+    if (!box) return;
 
-    // 조회수 기준 정렬
-    posts.sort((a, b) => b.views - a.views);
+    const all = [];
+    const tables = ["free", "qna", "notice", "info"];
+    
+    for (const table of tables) {
+        const { data } = await supabase
+            .from(table)
+            .select("id, title, views");
+        
+        if (data) {
+            all.push(...data.map(v => ({ ...v, table })));
+        }
+    }
+
+    all.sort((a, b) => b.views - a.views);
+    const top5 = all.slice(0, 5);
 
     box.innerHTML = "";
-    posts.slice(0, 5).forEach((p, i) => {
-        box.innerHTML += `<li>${i + 1}. ${p.title}</li>`;
+    top5.forEach((p, i) => {
+        const viewUrl = `${p.table}_view.html?id=${p.id}`;
+        box.innerHTML += `
+            <li onclick="location.href='${viewUrl}'" style="cursor:pointer;">
+                ${i + 1}. ${p.title}
+            </li>
+        `;
     });
 }
 
