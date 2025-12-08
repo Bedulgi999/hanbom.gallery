@@ -29,6 +29,7 @@ async function loadPost() {
     document.getElementById("title").innerText = data.title;
     document.getElementById("writer").innerText = data.writer;
     document.getElementById("date").innerText = data.created_at.split("T")[0];
+    document.getElementById("content").innerText = data.content;
     document.getElementById("views").innerText = data.views + 1;
 
     // ⭐ 조회수 증가 실행
