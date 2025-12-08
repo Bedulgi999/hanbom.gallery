@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>우리 학교 커뮤니티</title>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
 
+
+<body>
+  <!-- 상단 헤더 -->
+  <header class="header">
+    <a href="home.html" class="logo">
+        <img src="hanbom.png" alt="학교 로고">
+        <span>HANBOM GALLERY</span>
+    </a>
+
+    <nav class="nav">
+      <a href="home.html">홈</a>
+      <a href="notice.html">공지사항</a>
+      <a href="free.html">자유게시판</a>
+      <a href="qna.html">질문답변</a>
+      <a href="#">동아리</a>
+    </nav>
+
+    <div class="auth-buttons">
+        <a href="login.html" class="btn-login">로그인</a>
+        <a href="register.html" class="btn-signup">회원가입</a>
+    </div>
+
+    <div class="admin-buttons"></div>
+  </header> 
+
+  <!-- 메인 레이아웃 -->
+  <main class="container">
+    <!-- 왼쪽: 게시판 목록 -->
+    <section class="main-content">
+      <!-- 상단 탭 -->
+      <div class="board-tabs">
+        <a href="index.html" class="tab active">자유 게시판</a>
+        <a href="qna.html" class="tab">질문 & 답변</a>
+        <a href="info.html" class="tab">정보 공유</a>
+      </div>
+
+      <!-- 글 작성 버튼 + 검색 -->
+      <div class="toolbar">
+        <button class="btn-primary">✏️ 글쓰기</button>
+        <div class="search-box">
+          <input type="text" placeholder="검색어를 입력하세요">
+        </div>
+      </div>
+
+      <!-- 게시글 리스트 -->
+      <table class="post-table">
+        <thead>
+          <tr>
+            <th class="col-category">말머리</th>
+            <th class="col-title">제목</th>
+            <th class="col-writer">작성자</th>
+            <th class="col-date">날짜</th>
+            <th class="col-views">조회</th>
+          </tr>
+
+      </table>
+
+      <!-- 페이지네이션 -->
+      <div class="pagination">
+        <button class="page-btn disabled">〈</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">〉</button>
+      </div>
+    </section>
+
+    <!-- 오른쪽: 사이드바 -->
+    <aside class="sidebar">
+      <!-- 로그인 카드 -->
+      <div class="card">
+        <h3>로그인</h3>
+        <form class="login-form">
+          <input type="text" placeholder="아이디">
+          <input type="password" placeholder="비밀번호">
+          <button type="submit" class="btn-primary full">로그인</button>
+        </form>
+        <div class="login-links">
+          <a href="register.html">회원가입</a>
+          <span>·</span>
+          <a href="#">아이디/비밀번호 찾기</a>
+        </div>
+      </div>
+
+      <!-- 공지사항 카드 -->
+
+  <aside class="sidebar">
+      <div class="card">
+        <h3>📢 공지사항</h3>
+        <ul class="simple-list" id="sidebar-notice"></ul>
+      </div>
+
+      <div class="card">
+        <h3>🔥 인기 글 TOP 5</h3>
+        <ol class="rank-list" id="topPosts"></ol>
+      </div>
+
+
+      <!-- 태그 카드 -->
+      <div class="card">
+        <h3>🏷️ 인기 태그</h3>
+        <div class="tag-list">
+          <span class="tag">#시험</span>
+          <span class="tag">#수행평가</span>
+          <span class="tag">#동아리</span>
+          <span class="tag">#축제</span>
+          <span class="tag">#게임</span>
+          <span class="tag">#진로</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div>© 2025 우리 학교 커뮤니티. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">이용약관</a>
+      <a href="#">개인정보처리방침</a>
+      <a href="#">문의하기</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="sidebar.js"></script>
+<script src="login.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

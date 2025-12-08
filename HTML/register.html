@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="login.css">
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="register-body">
+
+  <div class="register-container">
+    <div class="register-card">
+
+      <div class="register-logo-box">
+        <img src="hanbom.png" alt="logo">
+        <h2>회원가입</h2>
+      </div>
+
+      <form class="register-form">
+        <!-- 아이디 / 비밀번호 / 이름 -->
+        <input type="text" placeholder="아이디" required>
+        <input type="password" placeholder="비밀번호" required>
+        <input type="text" placeholder="이름" required>
+
+        <!-- 학과 선택 -->
+        <select class="register-select" required>
+          <option disabled selected>학과 선택</option>
+          <option value="뷰티아트과">뷰티아트과</option>
+          <option value="캐릭터창작과">캐릭터창작과</option>
+          <option value="시각디자인과">시각디자인과</option>
+          <option value="빅데이터정보과">빅데이터정보과</option>
+          <option value="스마트제어과">스마트제어과</option>
+          <option value="사운드디자인과">사운드디자인과</option>
+        </select>
+
+        <!-- 학년 / 반 / 번호 -->
+        <div class="signup-row">
+          <select class="register-select-half" required>
+            <option disabled selected>학년 선택</option>
+            <option value="1">1학년</option>
+            <option value="2">2학년</option>
+            <option value="3">3학년</option>
+          </select>
+
+          <select class="register-select-half" required>
+            <option disabled selected>반 선택</option>
+            <option value="1">1반</option>
+            <option value="2">2반</option>
+          </select>
+
+          <select class="register-select-half" required>
+            <option disabled selected>번호 선택</option>
+            <!-- 1~25번 -->
+            <option value="1">1번</option>
+            <option value="2">2번</option>
+            <option value="3">3번</option>
+            <option value="4">4번</option>
+            <option value="5">5번</option>
+            <option value="6">6번</option>
+            <option value="7">7번</option>
+            <option value="8">8번</option>
+            <option value="9">9번</option>
+            <option value="10">10번</option>
+            <option value="11">11번</option>
+            <option value="12">12번</option>
+            <option value="13">13번</option>
+            <option value="14">14번</option>
+            <option value="15">15번</option>
+            <option value="16">16번</option>
+            <option value="17">17번</option>
+            <option value="18">18번</option>
+            <option value="19">19번</option>
+            <option value="20">20번</option>
+            <option value="21">21번</option>
+            <option value="22">22번</option>
+            <option value="23">23번</option>
+            <option value="24">24번</option>
+            <option value="25">25번</option>
+          </select>
+        </div>
+
+        <p class="register-sub">⚠️ 타인 정보 사용 금지 ⚠️</p>
+
+        <button type="submit" class="register-btn">회원가입</button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- 회원가입 로직 -->
+  <script src="config.js"></script>
+  <script src="register.js"></script>
+</body>
+</html>
