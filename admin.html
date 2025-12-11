@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지</title>
+  <link rel="stylesheet" href="admin.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <div class="admin-wrap">
+    <h2 class="admin-title">회원 DB 관리</h2>
+
+    <!-- 검색 + 요약 -->
+    <div class="admin-top-bar">
+      <input type="text" id="searchInput" placeholder="아이디 또는 이름 검색" class="admin-search">
+      <span class="admin-summary">총 회원 수: <strong id="userCount">0</strong>명</span>
+    </div>
+
+    <!-- 회원 관리 카드 -->
+    <div class="admin-card">
+      <!-- 회원 관리 테이블 -->
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('id')">아이디</th>
+            <th>비밀번호</th>
+            <th>이름</th>
+            <th>학과</th>
+            <th onclick="sortTable('grade')">학년</th>
+            <th>반</th>
+            <th>번호</th>
+            <th>방문</th>
+            <th>수정</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+      </table>
+
+      <!-- 페이징 -->
+      <div class="admin-pagination">
+        <button id="pagePrev" onclick="changePage(-1)">〈</button>
+        <span id="pageInfo">1 / 1</span>
+        <button id="pageNext" onclick="changePage(1)">〉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 회원 수정 모달 -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <h2>회원 정보 수정</h2>
+
+      <div class="modal-body">
+        <div class="modal-row">
+          <label>아이디</label>
+          <div id="edit-id" class="modal-id-box"></div>
+        </div>
+
+        <div class="modal-row">
+          <label>이름</label>
+          <input id="edit-name" type="text" placeholder="이름">
+        </div>
+
+        <div class="modal-row">
+          <label>학과</label>
+          <select id="edit-major">
+            <option value="">학과 선택</option>
+            <option value="뷰티아트과">뷰티아트과</option>
+            <option value="캐릭터창작과">캐릭터창작과</option>
+            <option value="시각디자인과">시각디자인과</option>
+            <option value="빅데이터정보과">빅데이터정보과</option>
+            <option value="스마트제어과">스마트제어과</option>
+            <option value="사운드디자인과">사운드디자인과</option>
+          </select>
+        </div>
+
+        <div class="modal-row modal-row-flex">
+          <div>
+            <label>학년</label>
+            <select id="edit-grade">
+              <option value="">학년 선택</option>
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+            </select>
+          </div>
+
+          <div>
+            <label>반</label>
+            <select id="edit-class">
+              <option value="">반 선택</option>
+              <option value="1">1반</option>
+              <option value="2">2반</option>
+              <option value="3">3반</option>
+            </select>
+          </div>
+
+          <div>
+            <label>번호</label>
+            <select id="edit-number">
+              <option value="">번호 선택</option>
+              <!-- 1~25 -->
+              <option value="1">1번</option>
+              <option value="2">2번</option>
+              <option value="3">3번</option>
+              <option value="4">4번</option>
+              <option value="5">5번</option>
+              <option value="6">6번</option>
+              <option value="7">7번</option>
+              <option value="8">8번</option>
+              <option value="9">9번</option>
+              <option value="10">10번</option>
+              <option value="11">11번</option>
+              <option value="12">12번</option>
+              <option value="13">13번</option>
+              <option value="14">14번</option>
+              <option value="15">15번</option>
+              <option value="16">16번</option>
+              <option value="17">17번</option>
+              <option value="18">18번</option>
+              <option value="19">19번</option>
+              <option value="20">20번</option>
+              <option value="21">21번</option>
+              <option value="22">22번</option>
+              <option value="23">23번</option>
+              <option value="24">24번</option>
+              <option value="25">25번</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-row">
+          <label>권한(role)</label>
+          <select id="edit-role">
+            <option value="user">일반 사용자</option>
+            <option value="admin">관리자</option>
+          </select>
+        </div>
+
+        <div class="modal-row">
+          <label>비밀번호 변경</label>
+          <input id="edit-password" type="password" placeholder="변경 시에만 입력 (빈칸이면 유지)">
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="modal-save-btn" onclick="saveUserEdit()">저장</button>
+        <button class="modal-cancel-btn" onclick="closeEditModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 삭제 확인 모달 -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content small">
+      <h3>정말 삭제할까요?</h3>
+      <p class="modal-desc">해당 회원 정보가 영구적으로 삭제됩니다.</p>
+      <div class="modal-buttons">
+        <button class="modal-delete-btn" onclick="confirmDelete()">삭제</button>
+        <button class="modal-cancel-btn" onclick="closeDeleteModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

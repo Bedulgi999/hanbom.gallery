@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 | HANBOM GALLERY</title>
+  <link rel="stylesheet" href="login.css">
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="login-body">
+
+  <div class="login-container">
+    <div class="login-card">
+
+      <div class="login-logo-box">
+        <img src="hanbom.png" alt="logo">
+        <h2>로그인</h2>
+      </div>
+
+      <form class="login-form">
+        <input type="text" placeholder="아이디">
+        <input type="password" placeholder="비밀번호">
+        <button type="submit" class="login-btn">로그인</button>
+      </form>
+
+      <div class="login-links">
+        <a href="register.html">회원가입</a>
+        <span>·</span>
+        <a href="#">아이디/비밀번호 찾기</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 로그인 로직 -->
+  <script src="config.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
